@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 
+
 class BaseModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -8,11 +9,13 @@ class BaseModel(models.Model):
     class Meta:
         abstract = True
 
+
 STATUS_CHOICES = [
     ("Pending", "Pending"),
     ("In Progress", "In Progress"),
     ("Completed", "Completed"),
 ]
+
 
 class Category(BaseModel):
     name = models.CharField(max_length=100)
@@ -24,6 +27,7 @@ class Category(BaseModel):
     def __str__(self):
         return self.name
 
+
 class Priority(BaseModel):
     name = models.CharField(max_length=100)
 
@@ -34,10 +38,12 @@ class Priority(BaseModel):
     def __str__(self):
         return self.name
 
+
 class Task(BaseModel):
     title = models.CharField(max_length=200)
     description = models.TextField()
-    status = models.CharField(max_length=50, choices=STATUS_CHOICES, default="Pending")
+    status = models.CharField(
+        max_length=50, choices=STATUS_CHOICES, default="Pending")
     deadline = models.DateTimeField(default=timezone.now)
     priority = models.ForeignKey(Priority, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
@@ -45,16 +51,21 @@ class Task(BaseModel):
     def __str__(self):
         return self.title
 
+
 class SubTask(BaseModel):
     title = models.CharField(max_length=200)
-    status = models.CharField(max_length=50, choices=STATUS_CHOICES, default="Pending")
-    parent_task = models.ForeignKey(Task, related_name="subtasks", on_delete=models.CASCADE)
+    status = models.CharField(
+        max_length=50, choices=STATUS_CHOICES, default="Pending")
+    parent_task = models.ForeignKey(
+        Task, related_name="subtasks", on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title
 
+
 class Note(BaseModel):
-    task = models.ForeignKey(Task, related_name="notes", on_delete=models.CASCADE)
+    task = models.ForeignKey(Task, related_name="notes",
+                             on_delete=models.CASCADE)
     content = models.TextField()
 
     def __str__(self):
