@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import Task, Category, Priority, Note, SubTask
 
-
+#wait
 class SubTaskInline(admin.TabularInline):
     model = SubTask
     extra = 1  
