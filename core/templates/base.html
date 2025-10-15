@@ -1,0 +1,211 @@
+{% load socialaccount %} {% load static %} {% load pwa %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hangarin | {% block title %}{% endblock %}</title>
+    {% progressive_web_app_meta %}
+
+    <!-- Bootstrap & Line Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/line-awesome/1.3.0/line-awesome/css/line-awesome.min.css" />
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'core/css/style.css' %}">
+
+    <style>
+        body {
+            background-color: #f8f9fc;
+        }
+
+        /* Sidebar */
+        #sidebar-wrapper {
+            width: 250px;
+            min-height: 100vh;
+            background: linear-gradient(180deg, #007bff 0%, #0056b3 100%);
+            color: white;
+            transition: all 0.3s;
+        }
+
+        #sidebar-wrapper .nav-link {
+            color: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            padding: 10px 15px;
+            transition: all 0.3s ease;
+        }
+
+        #sidebar-wrapper .nav-link:hover,
+        #sidebar-wrapper .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: #fff;
+        }
+
+        /* Top Navbar */
+        .navbar {
+            height: 65px;
+            background-color: #ffffff !important;
+        }
+
+        .navbar .form-control {
+            border-radius: 30px;
+        }
+
+        .navbar .dropdown-menu {
+            right: 0;
+            left: auto;
+        }
+
+        /* Page Content */
+        main {
+            min-height: calc(100vh - 65px);
+            background-color: #f8f9fc;
+        }
+
+        /* Hover animation */
+        .nav-link i {
+            transition: transform 0.2s ease;
+        }
+
+        .nav-link:hover i {
+            transform: scale(1.2);
+        }
+
+        .profile-pic {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="d-flex" id="wrapper">
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper" class="p-3 shadow-sm">
+            <h4 class="fw-bold mb-4 d-flex align-items-center">
+                <i class="la la-tasks me-2 fs-3"></i>Hangarin
+            </h4>
+            <ul class="nav flex-column">
+                <li class="nav-item mb-1">
+                    <a href="{% url 'dashboard' %}"
+                        class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                        <i class="la la-home me-2"></i>Dashboard
+                    </a>
+                </li>
+                <li class="nav-item mb-1">
+                    <a href="{% url 'task-list' %}"
+                        class="nav-link {% if request.resolver_match.url_name == 'task-list' %}active{% endif %}">
+                        <i class="la la-list me-2"></i>Tasks
+                    </a>
+                </li>
+                <li class="nav-item mb-1">
+                    <a href="{% url 'note-list' %}"
+                        class="nav-link {% if request.resolver_match.url_name == 'note-list' %}active{% endif %}">
+                        <i class="la la-copy me-2"></i>Notes
+                    </a>
+                </li>
+                <li class="nav-item mb-1">
+                    <a href="{% url 'category-list' %}"
+                        class="nav-link {% if request.resolver_match.url_name == 'category-list' %}active{% endif %}">
+                        <i class="la la-tags me-2"></i>Categories
+                    </a>
+                </li>
+                <li class="nav-item mb-1">
+                    <a href="{% url 'priority-list' %}"
+                        class="nav-link {% if request.resolver_match.url_name == 'priority-list' %}active{% endif %}">
+                        <i class="la la-flag me-2"></i>Priorities
+                    </a>
+                </li>
+                <li class="nav-item mb-1">
+                    <a href="{% url 'subtask-list' %}"
+                        class="nav-link {% if request.resolver_match.url_name == 'subtask-list' %}active{% endif %}">
+                        <i class="la la-tasks me-2"></i>Subtasks
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div id="page-content-wrapper" class="flex-grow-1">
+            <!-- Top Navbar -->
+            <nav class="navbar navbar-expand-lg navbar-light border-bottom shadow-sm px-4 sticky-top">
+                <div class="container-fluid">
+                    <form class="d-flex">
+                        <input class="form-control me-2" type="search" placeholder="Search..." aria-label="Search">
+                    </form>
+
+                    <ul class="navbar-nav ms-auto align-items-center">
+                        <li class="nav-item me-3">
+                            <i class="la la-bell fs-4 text-muted"></i>
+                        </li>
+
+                        {% if request.user.is_authenticated %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown"
+                                role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="{% static 'img/profile.jpg' %}" alt="User" class="profile-pic me-2">
+                                <span class="fw-semibold text-dark">{{ request.user.username }}</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="userDropdown">
+                                <li>
+                                    <div class="user-box">
+                                    <div class="u-img"><img src="{% static 'img/profile.jpg' %}" alt="user"></div>
+                                    <div class="u-text">
+                                        <h6>{{ request.user.username }}</h6>
+                                        <p class="text-muted">{{ request.user.email }}</p>
+                            </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="#"><i class="la la-user me-2"></i> Profile</a></li>
+                                <li><a class="dropdown-item" href="#"><i class="la la-cog me-2"></i> Settings</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li>
+                                    <a class="dropdown-item text-danger" href="{% url 'account_logout' %}">
+                                        <i class="la la-power-off me-2"></i> Logout
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        {% else %}
+                        <li class="nav-item">
+                            <a href="{% url 'account_login' %}" class="btn btn-outline-primary btn-sm">Login</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Page Body -->
+            <main class="p-4">
+                {% block content %}{% endblock %}
+            </main>
+        </div>
+    </div>
+
+    <!-- Bootstrap Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'js/core/jquery.3.2.1.min.js' %}"></script>
+    <script src="{% static 'js/core/popper.min.js' %}"></script>
+    <script src="{% static 'js/core/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js' %}"></script>
+    <script src="{% static 'js/plugin/chartist/chartist.min.js' %}"></script>
+    <script src="{% static 'js/plugin/chartist/plugin/chartist-plugin-tooltip.min.js' %}"></script>
+    <script src="{% static 'js/plugin/bootstrap-notify/bootstrap-notify.min.js' %}"></script>
+    <script src="{% static 'js/plugin/bootstrap-toggle/bootstrap-toggle.min.js' %}"></script>
+    <script src="{% static 'js/plugin/jquery-mapael/jquery.mapael.min.js' %}"></script>
+    <script src="{% static 'js/plugin/jquery-mapael/maps/world_countries.min.js' %}"></script>
+    <script src="{% static 'js/plugin/chart-circle/circles.min.js' %}"></script>
+    <script src="{% static 'js/plugin/jquery-scrollbar/jquery.scrollbar.min.js' %}"></script>
+    <script src="{% static 'js/ready.min.js' %}"></script>
+</body>
+
+</html>
