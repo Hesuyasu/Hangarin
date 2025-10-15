@@ -56,7 +56,7 @@ INSTALLED_APPS = [
 
     # Local apps
     'core',
-    'pwa'
+    'pwa',
 ]
 
 MIDDLEWARE = [
@@ -196,3 +196,9 @@ PWA_APP_ICONS_APPLE = [
 PWA_APP_DIR = 'ltr'
 PWA_SERVICE_WORKER_PATH = os.path.join(
     BASE_DIR, 'core', 'static', 'js', 'serviceworker.js')
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://hesuyasu.pythonanywhere.com",
+    "https://www.hesuyasu.pythonanywhere.com",
+]
+
