@@ -12,7 +12,7 @@ from .forms import TaskForm, CategoryForm, PriorityForm, SubTaskForm, NoteForm
 # ==============================
 # DASHBOARD VIEW
 # ==============================
-@login_required(login_url='/accounts/login/')
+@login_required(login_url='/account/login/')
 def dashboard(request):
     return render(request, 'dashboard.html')
 

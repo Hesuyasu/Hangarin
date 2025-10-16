@@ -121,10 +121,6 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.2/howto/static-files/
-
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
@@ -193,15 +189,28 @@ PWA_APP_ICONS_APPLE = [
 ]
 PWA_APP_DIR = 'ltr'
 PWA_SERVICE_WORKER_PATH = os.path.join(
-    BASE_DIR, 'core', 'static', 'js', 'serviceworker.js')
+    BASE_DIR, 'core', 'static', 'js', 'serviceworker.js'
+)
 
 CSRF_TRUSTED_ORIGINS = [
     "https://hesuyasu.pythonanywhere.com",
     "https://www.hesuyasu.pythonanywhere.com",
 ]
 
-STATIC_URL = 'static/'
+
+# ----------------------------
+# ✅ Static and Media Settings
+# ----------------------------
+
+# Serve static files (CSS, JS, Images)
+STATIC_URL = '/static/'
+
+# Collect all static files here (for deployment)
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_DIRS = (
-    BASE_DIR / 'static',
-)
+
+# Add your core/static directory
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+# Media files (optional for uploaded files)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'

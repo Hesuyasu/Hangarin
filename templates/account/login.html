@@ -1,0 +1,142 @@
+{% load socialaccount %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Hangarin Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.2/mdb.min.css" />
+    <style>
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', 'Roboto', sans-serif;
+        }
+
+        .auth-card {
+            width: 100%;
+            max-width: 400px;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(44, 62, 80, 0.15);
+            padding: 2.5rem 2rem;
+            animation: fadeIn 0.8s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .nav-pills .nav-link.active {
+            background: linear-gradient(90deg, #4e54c8 0%, #8f94fb 100%);
+            color: #fff;
+            font-weight: 500;
+        }
+
+        .nav-pills .nav-link {
+            color: #4e54c8;
+        }
+
+        .btn-social {
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 8px;
+            background: #f5f6fa;
+            transition: background 0.2s;
+        }
+
+        .btn-social:hover {
+            background: #e0eafc;
+        }
+
+        .form-outline .form-control:focus~.form-label {
+            color: #4e54c8;
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, #4e54c8 0%, #8f94fb 100%);
+            border: none;
+        }
+
+        .forgot-link {
+            color: #4e54c8;
+            text-decoration: none;
+        }
+
+        .forgot-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="auth-card">
+        <ul class="nav nav-pills nav-justified mb-4" id="ex1" role="tablist">
+            <li class="nav-item" role="presentation">
+                <a class="nav-link active" href="{% url 'account_login' %}">Login</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" href="{% url 'account_signup' %}">Register</a>
+            </li>
+        </ul>
+        <form method="post" action="{% url 'account_login' %}">
+            {% csrf_token %}
+            <div class="text-center mb-3">
+                <p class="mb-2">Sign in with</p>
+                <a href="{% provider_login_url 'google' %}" class="btn-social" title="Sign in with Google">
+                    <i class="fab fa-google fa-lg" style="color:#ea4335;"></i>
+                </a>
+                <a href="{% provider_login_url 'github' %}" class="btn-social" title="Sign in with GitHub">
+                    <i class="fab fa-github fa-lg" style="color:#333;"></i>
+                </a>
+            </div>
+            <div class="text-center mb-3">
+                <span>or use your account</span>
+            </div>
+            <div data-mdb-input-init class="form-outline mb-4">
+                <input type="text" name="login" id="id_login" class="form-control" required autocomplete="username" />
+                <label class="form-label" for="id_login">Email or Username</label>
+            </div>
+            <div data-mdb-input-init class="form-outline mb-4">
+                <input type="password" name="password" id="id_password" class="form-control" required
+                    autocomplete="current-password" />
+                <label class="form-label" for="id_password">Password</label>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="loginCheck" name="remember" />
+                    <label class="form-check-label" for="loginCheck">Remember me</label>
+                </div>
+                <a href="{% url 'account_reset_password' %}" class="forgot-link">Forgot password?</a>
+            </div>
+            {% if form.non_field_errors %}
+            <div class="alert alert-danger" role="alert">
+                {% for error in form.non_field_errors %}
+                <p{% if forloop.last %} class="mb-0" {% endif %}>{{ error }}</p>
+                    {% endfor %}
+            </div>
+            {% endif %}
+            <button type="submit" class="btn btn-primary btn-block mb-3">Sign in</button>
+        </form>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.2/mdb.min.js"></script>
+</body>
+
+</html>
